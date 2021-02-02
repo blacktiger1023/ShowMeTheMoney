@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kakaopay.showmoney.data.mappers.AcceptMapper">
+	<resultMap type="AcceptMoney" id="AcceptMoneyMap">
+		<id property="eventId" column="event_id" />
+		<result property="acceptId" column="accept_id" />
+		<result property="sprinkleId" column="sprinkle_id" />
+		<result property="roomId" column="room_id" />
+		<result property="acceptNo" column="accept_no" />
+		<result property="tokens" column="tokens" />
+		<result property="takeMoney" column="take_money" />
+		<result property="eventDt" column="event_dt" />
+	</resultMap>
+
+	<!-- 수금 이력 조회 -->
+	<select id="selectHistoryExist" parameterType="com.kakaopay.showmoney.data.dto.ParameterDTO" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			take_money_tb
+		WHERE accept_id = #{userId}
+			AND room_id = #{roomId}
+			AND tokens = #{tokens}
+	</select>
+	
+	<select id="selectHistoryByParameter" parameterType="com.kakaopay.showmoney.data.dto.ParameterDTO" resultMap="AcceptMoneyMap">
+		SELECT
+			event_id,
+			sprinkle_id,
+			accept_no,
+			room_id,
+			take_money,
+			tokens,
+			event_dt
+		FROM
+			take_money_tb
+		WHERE accept_id = #{userId}
+			AND room_id = #{roomId}
+			AND tokens = #{tokens}
+	</select>
+	
+	<!-- 수금 이력 생성 -->
+	<insert id="InsertAcceptMoney" parameterType="AcceptMoney">
+		INSERT INTO take_money_tb (
+			event_id,
+			sprinkle_id,
+			accept_id,
+			room_id,
+			take_money,
+			tokens,
+			event_dt
+		) VALUES (
+				#{eventId},
+				#{sprinkleId},
+				#{acceptId},
+				#{roomId},
+				#{takeMoney},
+				#{tokens},
+				str_to_date(#{eventDt},'%Y-%m-%d %H:%i:%S')
+		)
+	</insert>
+</mapper>

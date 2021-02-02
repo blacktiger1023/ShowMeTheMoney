@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kakaopay.showmoney.data.mappers.SprinkleMapper">
+	<resultMap type="Sprinkle" id="sprinkleMap">
+		<id property="sprinkleId" column="sprinkle_id" />
+		<result property="createId" column="create_id" />
+		<result property="roomId" column="room_id" />
+		<result property="sprinkleNo" column="sprinkle_no" />
+		<result property="tokens" column="tokens" />
+		<result property="money" column="money" />
+		<result property="remainMoney" column="remain_money" />
+		<result property="dividedMoney" column="divided_money" />
+		<result property="moneyOrd" column="money_ord" />
+		<result property="createDt" column="create_dt" />
+		<result property="expiryDt" column="expiry_dt" />
+	</resultMap>
+	
+	<!-- 뿌리기 지갑에 토큰값 존재하는지 확인 -->
+	<select id="selectSprinkleByToken" parameterType="String" resultMap="sprinkleMap">
+		SELECT
+			sprinkle_id,
+			create_id,
+			room_id,
+			sprinkle_no,
+			tokens,
+			money,
+			remain_money,
+			divided_money,
+			money_ord,
+			create_dt,
+			expiry_dt	
+		FROM
+			sprinkle_money_tb
+		WHERE tokens = #{token}
+	</select>
+	
+	<!-- 뿌리기 지갑 생성(데이터 추가) -->
+	<insert id="insertSprinkle" parameterType="Sprinkle">
+		INSERT INTO sprinkle_money_tb (
+			sprinkle_id,
+			create_id,
+			room_id,
+			tokens,
+			money,
+			remain_money,
+			divided_money,
+			money_ord,
+			create_dt,
+			expiry_dt
+		) VALUES (
+				#{sprinkleId},
+				#{createId},
+				#{roomId},
+				#{tokens},
+				#{money},
+				#{remainMoney},
+				#{dividedMoney},
+				#{moneyOrd},
+				str_to_date(#{createDt},'%Y-%m-%d %H:%i:%S'),
+				str_to_date(#{expiryDt},'%Y-%m-%d %H:%i:%S')
+		)
+	</insert>
+	
+	<!-- 파라미터로 뿌리기 지갑 정보 가져오기 -->
+	<select id="selectSprinkleByParams" parameterType="com.kakaopay.showmoney.data.dto.ParameterDTO" resultMap="sprinkleMap">
+		<![CDATA[
+		SELECT
+			sprinkle_id,
+			create_id,
+			room_id,
+			sprinkle_no,
+			tokens,
+			money,
+			remain_money,
+			divided_money,
+			money_ord,
+			create_dt,
+			expiry_dt
+		FROM
+			sprinkle_money_tb
+		WHERE create_id = #{userId}
+			AND room_id = #{roomId}
+			AND tokens = #{tokens}
+			AND create_dt >= DATE_ADD(now(), INTERVAL -7 DAY) 
+		]]>
+	</select>
+	
+	<!-- 파라미터로 수금을 위한 뿌리기 지갑 정보 가져오기 -->
+	<select id="selectForAcceptMoney" parameterType="com.kakaopay.showmoney.data.dto.ParameterDTO" resultMap="sprinkleMap">
+		<![CDATA[
+		SELECT
+			sprinkle_id,
+			create_id,
+			room_id,
+			sprinkle_no,
+			tokens,
+			money,
+			remain_money,
+			divided_money,
+			money_ord,
+			create_dt,
+			expiry_dt	
+		FROM
+			sprinkle_money_tb
+		WHERE room_id = #{roomId}
+			AND tokens = #{tokens}
+			AND expiry_dt >= now()
+		]]>
+	</select>
+	
+	<update id="updateSprinkleStatus" parameterType="com.kakaopay.showmoney.data.dto.ParameterDTO" >
+		UPDATE sprinkle_money_tb
+		SET
+			remain_money = remain_money-#{money}
+		WHERE tokens = #{tokens} AND room_id = #{roomId}
+	</update>
+	
+	<update id="updateSprinkleOrd" parameterType="com.kakaopay.showmoney.data.dto.ParameterDTO" >
+		UPDATE sprinkle_money_tb
+		SET
+			money_ord = money_ord+1
+		WHERE tokens = #{tokens} AND room_id = #{roomId}
+	</update>
+</mapper>
