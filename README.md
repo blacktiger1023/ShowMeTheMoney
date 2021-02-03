@@ -19,7 +19,7 @@
 
 ## ERD
 
-
+![image](https://user-images.githubusercontent.com/30514885/106680268-aa1d9d00-6601-11eb-8d3b-26abf1dae132.png)
 
 ## API 명세
 0. Header
