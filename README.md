@@ -22,16 +22,16 @@
 ![image](https://user-images.githubusercontent.com/30514885/106680268-aa1d9d00-6601-11eb-8d3b-26abf1dae132.png)
 
 ## API 명세
-0. Header
+### 0. Header (모든 항목 필수)
 X-USER-ID : 사용자ID  -- 숫자
 X-ROOM-ID : 대화방ID  -- 문자
 
 ### 1. 토큰 발행 ("api/rest/sprinkle")
 
 <GET>
-* 파라미터 : money - 금액 / count - 인원수
+    * 파라미터 : money - 금액 / count - 인원수
 <POST>
-* BODY : money - 금액 / count - 인원수
+    * BODY : money - 금액 / count - 인원수
 
 - 결과값
 
@@ -64,9 +64,9 @@ X-ROOM-ID : 대화방ID  -- 문자
 ### 2. 받기("/api/rest/accept")
 
 <GET>
-* 파라미터 : tokens - 토큰값
+    * 파라미터 : tokens - 토큰값
 <POST>
-* BODY : tokens - 토큰값
+    * BODY : tokens - 토큰값
 
 {
     "time": "2021-02-34 09:08:07",
@@ -83,9 +83,9 @@ X-ROOM-ID : 대화방ID  -- 문자
 ### 3. 조회("/api/rest/select")
 
 <GET>
-* 파라미터 : tokens - 토큰값
+    * 파라미터 : tokens - 토큰값
 <POST>
-* BODY : tokens - 토큰값
+    * BODY : tokens - 토큰값
   
  {
     "time": "2021-02-34 09:14:14",
