@@ -26,7 +26,7 @@
 X-USER-ID : 사용자ID  -- 숫자
 X-ROOM-ID : 대화방ID  -- 문자
 
-1. 토큰 발행 ("api/rest/sprinkle")
+### 1. 토큰 발행 ("api/rest/sprinkle")
 
 <GET>
 * 파라미터 : money - 금액 / count - 인원수
@@ -61,7 +61,7 @@ X-ROOM-ID : 대화방ID  -- 문자
     }
 }
 
-2. 받기("/api/rest/accept")
+### 2. 받기("/api/rest/accept")
 
 <GET>
 * 파라미터 : tokens - 토큰값
@@ -80,7 +80,7 @@ X-ROOM-ID : 대화방ID  -- 문자
     }
 }
 
-3. 조회("/api/rest/select")
+### 3. 조회("/api/rest/select")
 
 <GET>
 * 파라미터 : tokens - 토큰값
